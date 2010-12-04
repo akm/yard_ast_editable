@@ -1,23 +1,26 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 block_tree1 = <<EOS
-# comment foo1
+# foo1 #1
 foo1(:name1) do |f1|
   # bar1 #1
   bar1 do |b1|
     # bar1 #2
     bar1("name2"){|b2|
-      # comment b2 S
+      # b2 S
       puts b2.inspect
-      # comment b2 E
+      # b2 E
     }
-    # comment bar2 E
+    # bar2 E
   end
 end
-foo1(:name2, :opt1 => :true) do |f1|
-    # bar1 #3
+# foo1 #2 S
+foo1 :name2, :opt1 => true do |f1|
+  # bar1 #3 S
   bar1{ puts "name2 bar1" }
+  # bar1 #3 E
 end
+# foo1 #2 E
 EOS
 
 describe "YardAstEditable" do
@@ -26,6 +29,7 @@ describe "YardAstEditable" do
   end
 
   describe :fcall_by_ident do
+
     before do
       @ast = YARD::Parser::Ruby::RubyParser.new(block_tree1, nil).parse.root
     end
@@ -54,12 +58,18 @@ describe "YardAstEditable" do
       }
       node.should be_a(YARD::Parser::Ruby::AstNode)
       node[0].source.should == "foo1"
-      node[1].source.should == "(:name2, :opt1 => :true)"
+      node[1].source.should == ":name2, :opt1 => true"
     end
 
     it "find bar1 #1" do
       node = @ast.fcall_by_ident(:bar1){|fcall| fcall.arguments.empty? }
     end
+  end
+
+  describe :replace do
+    
+
+
 
   end
 
