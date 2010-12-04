@@ -27,7 +27,8 @@ Gem::Specification.new do |s|
     "lib/yard_ast_editable.rb",
     "spec/spec_helper.rb",
     "spec/yard_ast_editable_spec.rb",
-    "spec/yard_ast_spec.rb"
+    "spec/yard_ast_spec.rb",
+    "yard_ast_editable.gemspec"
   ]
   s.homepage = %q{http://github.com/akm/yard_ast_editable}
   s.licenses = ["MIT"]
