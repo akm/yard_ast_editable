@@ -46,6 +46,13 @@ module YardAstEditable
     end
     nil
   end
+
+  def replace_source(node, new_source)
+    result = full_source.dup
+    result[node.source_range] = new_source
+    result
+  end
+
 end
 
 YARD::Parser::Ruby::AstNode.module_eval do
