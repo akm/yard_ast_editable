@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{yard_ast_editable}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["akimatter"]
-  s.date = %q{2010-12-04}
+  s.date = %q{2010-12-06}
   s.description = %q{yard extension to modify source code by using AST Node}
   s.email = %q{akm2000@gmail.com}
   s.extra_rdoc_files = [
