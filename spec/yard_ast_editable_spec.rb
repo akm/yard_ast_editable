@@ -63,6 +63,34 @@ describe "YardAstEditable" do
     end
   end
 
+  describe :children_source do
+    
+    it "do...endブロックの中身を取得" do
+      node = @ast.fcall_by_ident(:foo1){|fcall|
+        fcall.arguments.length == 2 && (n = fcall.arguments.first; n.source == ":name2")
+      }
+      fcall = YardAstEditable::Fcall.new(node)      
+      fcall.block_content_source.should == %q{  # bar1 #3 S
+  bar1{ puts "name2 bar1" }
+  # bar1 #3 E
+}
+    end
+    
+    it "{}ブロックの中身を取得" do
+      node = @ast.fcall_by_ident(:bar1){|fcall|
+        fcall.arguments.length == 1 && (n = fcall.arguments.first; n.source == '"name2"')
+      }
+      fcall = YardAstEditable::Fcall.new(node)
+      fcall.block_content_source.should == %q{      # b2 S
+      puts b2.inspect
+      # b2 E
+    }
+    end
+    
+  end
+
+
+
   describe :replace_source do
     it "全体に対して一部を置換" do
       node = @ast.fcall_by_ident(:foo1){|fcall|

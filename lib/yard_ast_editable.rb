@@ -24,6 +24,20 @@ module YardAstEditable
       @arguments.pop if @arguments.last == false
       @arguments
     end
+
+    def block_content_source
+      return nil unless block
+      result = block.source
+      case block.type
+      when :do_block then
+        result.sub!(/^do\s*(\|.*?\|)?\n?/, '')
+        result.sub!(/end$/, '')
+      when :brace_block then
+        result.sub!(/^\{\s*(\|.*?\|)?\n?/, '')
+        result.sub!(/\}$/, '')
+      end
+      result
+    end
   end
 
 
@@ -46,6 +60,16 @@ module YardAstEditable
     end
     nil
   end
+
+#   def children_source
+#     ranges = children.map{|c| [c.comments_range, c.source_range] }.flatten.compact
+#     min_range = ranges.min_by(&:first)
+#     max_range = ranges.max_by(&:last)
+#     puts "min_range: #{min_range.inspect}"
+#     puts "max_range: #{max_range.inspect}"
+#     full_source[min_range.first..max_range.last]
+#   end
+
 
   def replace_source(node, new_source)
     result = full_source.dup
