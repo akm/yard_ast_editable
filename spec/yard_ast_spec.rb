@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "YardAst" do
@@ -139,6 +140,44 @@ describe "YardAst" do
         end
       end
 
+    end
+  end
+
+
+ describe YardAstEditable::Fcall do
+    before do
+      script = <<-EOS
+instance("i-12345678") do
+  agent("mm_system_agent") do
+    service("system")
+  end
+end
+EOS
+      ast = YARD::Parser::Ruby::RubyParser.new(script, nil).parse.root
+      node = ast.fcall_by_ident(:instance){|fcall|
+        !fcall.arguments.empty? && (n = fcall.arguments.first; n.first.source == "i-12345678")
+      }
+      @caller = YardAstEditable::Fcall.new(node)
+    end
+
+    describe :block_content_source do
+      # reported by totty. ありがとー
+      it "[BUG] ネストしているブロックの内部のendの処理がおかしい" do
+        # バグ修正前は以下のようになっていました。
+        # -  agent("mm_system_agent") do
+        # +agent("mm_system_agent") do
+        #      service("system")
+        # -  end
+        # +  
+        # +end
+        @caller.block.nil?.should be_false
+        result = @caller.block_content_source
+        result.should == <<-EXPECT
+agent("mm_system_agent") do
+    service("system")
+  end
+EXPECT
+      end
     end
   end
 
