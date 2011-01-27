@@ -147,11 +147,17 @@ describe "YardAst" do
  describe YardAstEditable::Fcall do
     before do
       script = <<-EOS
+# comment1
 instance("i-12345678") do
+  # comment2
   agent("mm_system_agent") do
+    # comment3
     service("system")
+    # comment4
   end
+  # comment5
 end
+# comment6
 EOS
       ast = YARD::Parser::Ruby::RubyParser.new(script, nil).parse.root
       node = ast.fcall_by_ident(:instance){|fcall|
@@ -173,9 +179,13 @@ EOS
         @caller.block.nil?.should be_false
         result = @caller.block_content_source
         result.should == <<-EXPECT
-agent("mm_system_agent") do
+  # comment2
+  agent("mm_system_agent") do
+    # comment3
     service("system")
+    # comment4
   end
+  # comment5
 EXPECT
       end
     end

@@ -30,7 +30,7 @@ module YardAstEditable
       result = block.source
       case block.type
       when :do_block then
-        result.sub!(/\Ado\s*(\|.*?\|)?\n?/, '')
+        result.sub!(/\Ado[ \t\f]*(\|.*?\|)?\n?/, '')
         result.sub!(/end[\s\n]*\Z/, '')
       when :brace_block then
         result.sub!(/^\{\s*(\|.*?\|)?\n?/, '')
