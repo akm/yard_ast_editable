@@ -64,18 +64,18 @@ describe "YardAstEditable" do
   end
 
   describe :children_source do
-    
+
     it "do...endブロックの中身を取得" do
       node = @ast.fcall_by_ident(:foo1){|fcall|
         fcall.arguments.length == 2 && (n = fcall.arguments.first; n.source == ":name2")
       }
-      fcall = YardAstEditable::Fcall.new(node)      
+      fcall = YardAstEditable::Fcall.new(node)
       fcall.block_content_source.should == %q{  # bar1 #3 S
   bar1{ puts "name2 bar1" }
   # bar1 #3 E
 }
     end
-    
+
     it "{}ブロックの中身を取得" do
       node = @ast.fcall_by_ident(:bar1){|fcall|
         fcall.arguments.length == 1 && (n = fcall.arguments.first; n.source == '"name2"')
@@ -86,7 +86,7 @@ describe "YardAstEditable" do
       # b2 E
     }
     end
-    
+
   end
 
 
